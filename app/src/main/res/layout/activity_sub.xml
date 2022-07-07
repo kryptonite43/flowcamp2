@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SubActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+
+        >
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:text="name"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:layout_marginLeft="10dp"
+            android:text="email"
+            android:textSize="13sp"
+            />
+
+
+
+        <ImageView
+            android:id="@+id/iv_profile"
+            android:gravity="end"
+
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10sp"
+            android:scaleType="center"
+
+            tools:srcCompat="@tools:sample/avatars" />
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_marginTop="100dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_insert_emoticon_24"
+            >
+
+        </ImageView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="12"
+                android:id="@+id/what"
+                android:hint="search">
+
+            </EditText>
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="5dp"
+                android:layout_gravity="center"
+                android:id="@+id/searchit"
+                android:layout_weight="0"
+                android:background="@drawable/ic_baseline_search_24"
+                >
+            </Button>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_hist1"
+            android:layout_width="match_parent"
+            android:text=""
+            android:layout_height="wrap_content">
+        </TextView>
+        <TextView
+            android:id="@+id/text_hist2"
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </TextView>
+        <TextView
+            android:id="@+id/text_hist3"
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </TextView>
+        <TextView
+            android:id="@+id/text_hist4"
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </TextView>
+        <TextView
+            android:id="@+id/text_hist5"
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </TextView>
+        <TextView
+            android:id="@+id/text_hist6"
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </TextView>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="로그아웃" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

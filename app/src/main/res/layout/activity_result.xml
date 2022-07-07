@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ResultActivity">
+
+        <TextView
+            android:id="@+id/restv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="30sp"
+            android:layout_gravity="start"
+            android:background="@drawable/rectangle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:id="@+id/google"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_search_24">
+    </ImageButton>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:id="@+id/naver"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_search_24">
+    </ImageButton>
+    <ImageButton
+        android:id="@+id/youtube"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_search_24">
+    </ImageButton>
+    <ImageButton
+        android:id="@+id/wiki"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_search_24">
+    </ImageButton>
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/webview">
+
+    </WebView>
+</LinearLayout>
