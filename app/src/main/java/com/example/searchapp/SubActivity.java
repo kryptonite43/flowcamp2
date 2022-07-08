@@ -92,13 +92,6 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             }
         });
 
-
-        
-
-        TextView tv = (TextView)findViewById(R.id.text_hist1);
-        EditText search = (EditText)findViewById(R.id.what) ;
-        Button searchb = (Button)findViewById(R.id.searchit);
-
         searchb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
