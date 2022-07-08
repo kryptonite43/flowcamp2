@@ -35,6 +35,7 @@
         </activity>
         <activity
             android:name=".SubActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:exported="false" />
 
 

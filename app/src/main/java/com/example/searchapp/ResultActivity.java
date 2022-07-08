@@ -16,14 +16,16 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class ResultActivity extends AppCompatActivity implements View.OnClickListener{
-    private String search, email;
+    private String search, email, nick, profimg;
     private WebView webView;
     private ArrayList<String> urls;
+    Button home;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +38,9 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         urls.add("https://ko.m.wikipedia.org/w/index.php?search="); // wiki url
 
         search = intent.getStringExtra("search");
+        nick = intent.getStringExtra("name");
         email = intent.getStringExtra("email");
+        profimg = intent.getStringExtra("profileImg");
         Log.e("email", String.valueOf(email));
         Log.e("result", search);
 
@@ -45,7 +49,10 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         Button naver = findViewById(R.id.naver);
         Button youtube = findViewById(R.id.youtube);
         Button wiki = findViewById(R.id.wiki);
-
+        ListView lv = findViewById(R.id.listview);
+        lv.bringToFront();
+        home = findViewById(R.id.home);
+        home.setOnClickListener(this::onClick);
         tv.setText(search);
         tv.addTextChangedListener(new TextWatcher() {
             @Override
@@ -71,7 +78,9 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                     search = tv.getText().toString();
                     Intent intent = new Intent(ResultActivity.this, ResultActivity.class);
                     intent.putExtra("search", search);
+                    intent.putExtra("name",nick);
                     intent.putExtra("email",email);
+                    intent.putExtra("profileImg",profimg);
                     startActivity(intent);
                 }
                 return true;
@@ -91,7 +100,8 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 
-
+        search = search.replace(" ","+");
+        webView.loadUrl(urls.get(0) +search);
 
         google.setOnClickListener(this);
         naver.setOnClickListener(this);
@@ -117,6 +127,14 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.wiki:
                 webView.loadUrl(urls.get(3)+search);
                 break;
+            case R.id.home:
+//                home.setVisibility(View.VISIBLE);
+                Intent intent = new Intent(ResultActivity.this, SubActivity.class);
+                intent.putExtra("search", search);
+                intent.putExtra("name",nick);
+                intent.putExtra("email",email);
+                intent.putExtra("profileImg",profimg);
+                startActivity(intent);
         }
     }
 }

@@ -2,15 +2,21 @@ package com.example.searchapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +53,17 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
         TextView tv_nick = findViewById(R.id.tv_nickname);
         TextView tv_email = findViewById(R.id.tv_email);
         ImageView iv_profile = findViewById(R.id.iv_profile);
-
+        ListView searchlist = findViewById(R.id.listview);
+        searchlist.bringToFront();
+        LinearLayout fullscreen = findViewById(R.id.fullscreen);
+        fullscreen.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                hideKeyboard();
+                searchlist.setVisibility(View.INVISIBLE);
+                return false;
+            }
+        });
         // 닉네임, 이메일, 프로필이미지
         tv_nick.setText(strNick);
         tv_email.setText(strEmail);
@@ -74,53 +90,78 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
         retrofitInterface = retrofit.create(RetrofitInterface.class);
 
 
-        TextView tv = findViewById(R.id.text_hist1);
+
         EditText search = findViewById(R.id.what) ;
         Button searchb = findViewById(R.id.searchit);
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchlist.setVisibility(View.VISIBLE);
+            }
+        });
+
         search.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                //searchlist.setVisibility(View.VISIBLE);
                 if (i==KeyEvent.KEYCODE_ENTER && keyEvent.getAction()==KeyEvent.ACTION_DOWN){
-                    Log.e("enter", "enter");
-                    tv.setText(search.getText().toString());
-                    Intent intent = new Intent(SubActivity.this, ResultActivity.class);
-                    intent.putExtra("search", search.getText().toString());
-                    intent.putExtra("email",strEmail);
-                    startActivity(intent);
+                    if (search.getText().toString().compareTo("")!=0) { // null값 return이 아닐 때만 동작
+                        Intent intent = new Intent(SubActivity.this, ResultActivity.class);
+                        intent.putExtra("search", search.getText().toString());
+                        intent.putExtra("name",strNick);
+                        intent.putExtra("email",strEmail);
+                        intent.putExtra("profileImg",strProfileImg);
+                        startActivity(intent);
+                    }
+                    //Toast.makeText(SubActivity.this, search.getText().toString(), Toast.LENGTH_SHORT).show();
+
+
                 }
                 return true;
             }
         });
 
+
         searchb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tv.setText(search.getText().toString());
-                Intent intent = new Intent(SubActivity.this, ResultActivity.class);
-                intent.putExtra("search", search.getText().toString());
-                intent.putExtra("email",strEmail);
-                startActivity(intent);
+                if (search.getText().toString().compareTo("")!=0) {
+                    Intent intent = new Intent(SubActivity.this, ResultActivity.class);
+                    intent.putExtra("search", search.getText().toString());
+                    intent.putExtra("name",strNick);
+                    intent.putExtra("email",strEmail);
+                    intent.putExtra("profileImg",strProfileImg);
+                    startActivity(intent);
 
-                HashMap<String, String> map = new HashMap<>();
-                map.put("email", strEmail);
-                map.put("text", search.getText().toString());
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("email", strEmail);
+                    map.put("text", search.getText().toString());
 
-                Call<SearchResult> call = retrofitInterface.executeSearch(map);
+                    Call<SearchResult> call = retrofitInterface.executeSearch(map);
 
-                call.enqueue(new Callback<SearchResult>() {
-                    @Override
-                    public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
-                        Toast.makeText(SubActivity.this, "post success", Toast.LENGTH_LONG).show();
-                    }
+                    call.enqueue(new Callback<SearchResult>() {
+                        @Override
+                        public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
+                            Toast.makeText(SubActivity.this, "post success", Toast.LENGTH_LONG).show();
+                        }
 
-                    @Override
-                    public void onFailure(Call<SearchResult> call, Throwable t) {
-                        Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<SearchResult> call, Throwable t) {
+                            Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                }
+
             }
         });
 
 
+    }
+    void hideKeyboard()
+    {
+        InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }
