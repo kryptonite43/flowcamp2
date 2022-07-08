@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -72,9 +73,32 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
 
         retrofitInterface = retrofit.create(RetrofitInterface.class);
 
+
+        TextView tv = findViewById(R.id.text_hist1);
+        EditText search = findViewById(R.id.what) ;
+        Button searchb = findViewById(R.id.searchit);
+        search.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (i==KeyEvent.KEYCODE_ENTER && keyEvent.getAction()==KeyEvent.ACTION_DOWN){
+                    Log.e("enter", "enter");
+                    tv.setText(search.getText().toString());
+                    Intent intent = new Intent(SubActivity.this, ResultActivity.class);
+                    intent.putExtra("search", search.getText().toString());
+                    intent.putExtra("email",strEmail);
+                    startActivity(intent);
+                }
+                return true;
+            }
+        });
+
+
+        
+
         TextView tv = (TextView)findViewById(R.id.text_hist1);
         EditText search = (EditText)findViewById(R.id.what) ;
         Button searchb = (Button)findViewById(R.id.searchit);
+
         searchb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
