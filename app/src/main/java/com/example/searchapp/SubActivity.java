@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,7 +26,9 @@ import com.bumptech.glide.Glide;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.xml.transform.Result;
 
@@ -39,7 +42,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
     private String strNick, strProfileImg, strEmail;
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "http://172.10.5.108:443";
+    private String BASE_URL = "http://172.10.18.161:443";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +92,6 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
 
         retrofitInterface = retrofit.create(RetrofitInterface.class);
 
-
-
         EditText search = findViewById(R.id.what) ;
         Button searchb = findViewById(R.id.searchit);
 
@@ -98,6 +99,24 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             @Override
             public void onClick(View view) {
                 searchlist.setVisibility(View.VISIBLE);
+
+                Call<List<String>> call = retrofitInterface.executeMyRecord(strEmail);
+                call.enqueue(new Callback<List<String>>() {
+                    @Override
+                    public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                        if (response.code() == 200) {
+                            List<String> data = response.body();
+                            RecentSearchListAdapter adapter = new RecentSearchListAdapter(getApplicationContext(), retrofitInterface, strEmail, data);
+                            searchlist.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<String>> call, Throwable t) {
+                        Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
 
@@ -113,6 +132,24 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                         intent.putExtra("email",strEmail);
                         intent.putExtra("profileImg",strProfileImg);
                         startActivity(intent);
+
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("email", strEmail);
+                        map.put("text", search.getText().toString());
+
+                        Call<Void> call = retrofitInterface.executeSearch(map);
+
+                        call.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                Toast.makeText(SubActivity.this, "post success", Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
                     //Toast.makeText(SubActivity.this, search.getText().toString(), Toast.LENGTH_SHORT).show();
 
@@ -138,16 +175,16 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                     map.put("email", strEmail);
                     map.put("text", search.getText().toString());
 
-                    Call<SearchResult> call = retrofitInterface.executeSearch(map);
+                    Call<Void> call = retrofitInterface.executeSearch(map);
 
-                    call.enqueue(new Callback<SearchResult>() {
+                    call.enqueue(new Callback<Void>() {
                         @Override
-                        public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
+                        public void onResponse(Call<Void> call, Response<Void> response) {
                             Toast.makeText(SubActivity.this, "post success", Toast.LENGTH_LONG).show();
                         }
 
                         @Override
-                        public void onFailure(Call<SearchResult> call, Throwable t) {
+                        public void onFailure(Call<Void> call, Throwable t) {
                             Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
@@ -159,6 +196,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
 
 
     }
+
     void hideKeyboard()
     {
         InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
