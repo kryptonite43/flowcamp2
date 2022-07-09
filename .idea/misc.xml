@@ -3,10 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/sonyj/AndroidStudioProjects/SearchApp/app/src/main/res/drawable/circle.xml" value="0.1235" />
         <entry key="..\:/Users/sonyj/AndroidStudioProjects/SearchApp/app/src/main/res/drawable/rectangle.xml" value="0.1345" />
+        <entry key="..\:/Users/sonyj/AndroidStudioProjects/SearchApp/app/src/main/res/drawable/searchrec.xml" value="0.161" />
         <entry key="..\:/Users/sonyj/AndroidStudioProjects/SearchApp/app/src/main/res/layout/activity_main.xml" value="0.264" />
-        <entry key="..\:/Users/sonyj/AndroidStudioProjects/SearchApp/app/src/main/res/layout/activity_result.xml" value="0.264" />
-        <entry key="..\:/Users/sonyj/AndroidStudioProjects/SearchApp/app/src/main/res/layout/activity_sub.xml" value="0.25" />
+        <entry key="..\:/Users/sonyj/AndroidStudioProjects/SearchApp/app/src/main/res/layout/activity_result.xml" value="0.2" />
+        <entry key="..\:/Users/sonyj/AndroidStudioProjects/SearchApp/app/src/main/res/layout/activity_sub.xml" value="0.264" />
+        <entry key="..\:/Users/sonyj/AndroidStudioProjects/SearchApp/app/src/main/res/layout/listview_item.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/sonyj/AndroidStudioProjects/SearchApp/app/src/main/res/menu/menu_account.xml" value="0.2" />
+        <entry key="..\:/Users/sonyj/AndroidStudioProjects/SearchApp/app/src/main/res/menu/menu_main.xml" value="0.25364583333333335" />
       </map>
     </option>
   </component>
