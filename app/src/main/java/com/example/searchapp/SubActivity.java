@@ -106,7 +106,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                     public void onResponse(Call<List<String>> call, Response<List<String>> response) {
                         if (response.code() == 200) {
                             List<String> data = response.body();
-                            RecentSearchListAdapter adapter = new RecentSearchListAdapter(getApplicationContext(), retrofitInterface, strEmail, data);
+                            RecentSearchListAdapter adapter = new RecentSearchListAdapter(getApplicationContext(), retrofitInterface, strNick, strProfileImg, strEmail, data);
                             searchlist.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         }

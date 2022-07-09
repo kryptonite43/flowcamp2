@@ -1,6 +1,7 @@
 package com.example.searchapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,13 +30,15 @@ public class RecentSearchListAdapter extends BaseAdapter {
 
     Context context;
     RetrofitInterface retrofitInterface;
-    String strEmail;
+    String strEmail, strNick, strProfileImg;
     List<String> data;
     LayoutInflater inflater;
 
-    public RecentSearchListAdapter(Context context, RetrofitInterface retrofitInterface, String strEmail, List<String> data) {
+    public RecentSearchListAdapter(Context context, RetrofitInterface retrofitInterface, String strNick, String strProfileImg, String strEmail, List<String> data) {
         this.context = context;
         this.retrofitInterface = retrofitInterface;
+        this.strNick = strNick;
+        this.strProfileImg = strProfileImg;
         this.strEmail = strEmail;
         this.data = data;
         inflater = LayoutInflater.from(context);
@@ -91,6 +94,36 @@ public class RecentSearchListAdapter extends BaseAdapter {
 
                 data.remove(i);
                 notifyDataSetChanged();
+            }
+        });
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ResultActivity.class);
+                intent.putExtra("search", data.get(i));
+                intent.putExtra("name",strNick);
+                intent.putExtra("email",strEmail);
+                intent.putExtra("profileImg",strProfileImg);
+                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("email", strEmail);
+                map.put("text", data.get(i));
+
+                Call<Void> call = retrofitInterface.executeSearch(map);
+
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        Toast.makeText(context, "post success", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
         return view;
