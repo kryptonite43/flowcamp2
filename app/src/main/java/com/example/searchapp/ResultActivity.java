@@ -1,23 +1,36 @@
 package com.example.searchapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -25,6 +38,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     private String search, email, nick, profimg;
     private WebView webView;
     private ArrayList<String> urls;
+    private static OnMenuItemClickListener onMenuItemClickListener;
     Button home;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +49,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         urls.add("https://www.google.com/search?q="); // google urls
         urls.add("https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query="); // naver url
         urls.add("https://www.youtube.com/results?search_query="); // youtube url
-        urls.add("https://ko.m.wikipedia.org/w/index.php?search="); // wiki url
+        urls.add("https://en.m.wikipedia.org/w/index.php?search="); // wiki url
 
         search = intent.getStringExtra("search");
         nick = intent.getStringExtra("name");
@@ -45,29 +59,62 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         Log.e("result", search);
 
         EditText tv = findViewById(R.id.restv);
+        //Button menu = findViewById(R.id.menubutton);
         Button google = findViewById(R.id.google);
         Button naver = findViewById(R.id.naver);
         Button youtube = findViewById(R.id.youtube);
         Button wiki = findViewById(R.id.wiki);
         ListView lv = findViewById(R.id.listview);
+        LinearLayout fullscreen = findViewById(R.id.fullscreen);
+        
+        onMenuItemClickListener = new OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                search = search.replace(" ","+");
+                switch( menuItem.getItemId() ){//눌러진 MenuItem의 Item Id를 얻어와 식별
+                    case R.id.google:
+                        webView.loadUrl(urls.get(0) +search);
+                        Toast.makeText(ResultActivity.this, "google", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.naver:
+                        webView.loadUrl(urls.get(1) +search);
+                        Toast.makeText(ResultActivity.this, "naver", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.youtube:
+                        webView.loadUrl(urls.get(2) +search);
+                        Toast.makeText(ResultActivity.this, "youtube", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.wiki:
+                        webView.loadUrl(urls.get(3) +search);
+                        Toast.makeText(ResultActivity.this, "wiki", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return false;
+            }
+        };
+//        menu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                popUp(view);
+//            }
+//        });
+        WebView webview = findViewById(R.id.webview);
+        webview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                hideKeyboard();
+                lv.setVisibility(View.GONE);
+                return false;
+            }
+        });
         lv.bringToFront();
         home = findViewById(R.id.home);
         home.setOnClickListener(this::onClick);
         tv.setText(search);
-        tv.addTextChangedListener(new TextWatcher() {
+        tv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                search = charSequence.toString();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
+            public void onClick(View view) {
+                lv.setVisibility(View.VISIBLE);
             }
         });
         tv.setOnKeyListener(new View.OnKeyListener() {
@@ -110,7 +157,26 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
 
     }
+    public final void popUp(View view) {
+        PopupMenu popup = new PopupMenu(this, view); // 인자 (context, 팝업메뉴 연결 anchor 뷰)
+        getMenuInflater().inflate(R.menu.menu_main, popup.getMenu()); // 메뉴아이템 건져서 메뉴 inflate
+        popup.setOnMenuItemClickListener(onMenuItemClickListener); // onCreate에서 생성한 리스너를 팝업메뉴에 셋팅
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            popup.setForceShowIcon(true);
+        }
+        //MenuPopupHelper menuPopupHelper = new MenuPopupHelper(this,(MenuBuilder)popup.getMenu(), view);
+        // popup.show(view); //Popup Menu 보이기
+//        MenuPopupHelper menuHelper = new MenuPopupHelper(this, (MenuBuilder) popup.getMenu(), view);
+//        menuHelper.setForceShowIcon(true);
+//        menuHelper.show();
 
+        popup.show(); //Popup Menu 보이기
+    }
+    void hideKeyboard()
+    {
+        InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
     @Override
     public void onClick(View view) {
         search = search.replace(" ","+");
