@@ -9,195 +9,158 @@
     tools:context=".SubActivity">
 
 
-
-<LinearLayout
-    android:id="@+id/fullscreen"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
-    android:orientation="vertical">
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:gravity="center"-->
-
-<!--        >-->
-<FrameLayout
-    android:id="@+id/nickframe"
-    android:layout_width="55dp"
-    android:layout_height="55dp"
-    android:layout_margin="5dp"
-    android:background="@drawable/circle"
-    android:layout_gravity="end">
-    <TextView
-        android:id="@+id/tv_nickname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-
-        android:foregroundGravity="center"
-        android:text="name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textSize="15sp"
-        />
-</FrameLayout>
-
-
-        <TextView
-            android:id="@+id/tv_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_marginLeft="10dp"
-            android:text="email"
-            android:textSize="13sp"
-            />
-
-
-
-        <ImageView
-            android:id="@+id/iv_profile"
-            android:gravity="end"
-            android:visibility="gone"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10sp"
-            android:scaleType="center"
-
-            tools:srcCompat="@tools:sample/avatars" />
-<!--    </LinearLayout>-->
-
-
     <LinearLayout
+        android:id="@+id/fullscreen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:orientation="vertical">
 
-<!--        <Button-->
-<!--            android:id="@+id/btn_logout"-->
-<!--            android:layout_width="50dp"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:layout_gravity="end"-->
 
+        <FrameLayout
+            android:id="@+id/nickframe"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="end"
+            android:layout_margin="5dp"
+            android:background="@drawable/circle">
 
-<!--            android:text="logout"-->
-<!--            android:textSize="12sp"/>-->
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="start"
-            android:src="@drawable/ic_baseline_insert_emoticon_24">
-
-        </ImageView>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/search_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:id="@+id/block"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_gravity="center"
 
-                <EditText
-                    android:id="@+id/what"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="7dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="12"
-                    android:background="@drawable/searchrec"
-                    android:hint="search"
-                    android:imeOptions="actionSearch"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:paddingStart="15dp"
+                android:foregroundGravity="center"
+                android:text="name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="15sp" />
+        </FrameLayout>
 
-                    >
-
-                </EditText>
-
-                <Button
-                    android:id="@+id/searchit"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="0"
-
-                    android:background="@drawable/search3"
-                    android:foreground="@drawable/search3"
-                    android:paddingRight="5dp"></Button>
-            </LinearLayout>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
 
-            <RelativeLayout
-                android:id="@+id/rl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintLeft_toLeftOf="parent"
+            android:orientation="vertical">
 
-                app:layout_constraintRight_toRightOf="parent">
-
-                <ListView
-                    android:id="@+id/listview"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginLeft="7dp"
-                    android:layout_marginRight="63dp"
-                    android:background="@drawable/rectangle"
-                    android:visibility="gone"
-                    tools:listitem="@layout/listview_item" />
-
-
-            </RelativeLayout>
 
             <ImageView
-                android:id="@+id/realimage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="5dp"
-                android:paddingBottom="5dp"
-                app:layout_constraintBottom_toTopOf="@id/realtimelist"
-                app:layout_constraintRight_toLeftOf="@+id/realtime"
-                app:layout_constraintTop_toBottomOf="@id/rl"
-                app:layout_constraintLeft_toLeftOf="parent"
-                android:src="@drawable/statistics"
-                >
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                android:src="@drawable/logo2">
 
             </ImageView>
-            <TextView
-                android:id="@+id/realtime"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
 
-                android:text="실시간 키워드"
-                android:textSize="20sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="3dp"
-                app:layout_constraintLeft_toRightOf="@+id/realimage"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
 
-                app:layout_constraintBottom_toTopOf="@id/realtimelist"
-                app:layout_constraintTop_toBottomOf="@id/rl" />
+                <LinearLayout
+                    android:id="@+id/block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <EditText
+                        android:id="@+id/what"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="7dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="12"
+                        android:background="@drawable/searchrec"
+                        android:hint="search"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingStart="15dp"
+                        >
+
+                    </EditText>
+
+                    <Button
+                        android:id="@+id/searchit"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="0"
+
+                        android:background="@drawable/search3"
+                        android:foreground="@drawable/search3"
+                        android:paddingRight="5dp" />
+                </LinearLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+
+                    app:layout_constraintRight_toRightOf="parent">
+
+                    <ListView
+                        android:id="@+id/listview"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:layout_marginLeft="7dp"
+                        android:layout_marginRight="63dp"
+                        android:background="@drawable/rectangle"
+                        android:visibility="gone"
+                        tools:listitem="@layout/listview_item" />
+
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/realimage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:paddingBottom="5dp"
+                    android:src="@drawable/statistics"
+                    app:layout_constraintBottom_toTopOf="@id/recview"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/realtime"
+                    app:layout_constraintTop_toBottomOf="@id/rl">
+
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/realtime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginTop="10dp"
+                    android:text="실시간 키워드"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@id/recview"
+
+                    app:layout_constraintLeft_toRightOf="@+id/realimage"
+                    app:layout_constraintTop_toBottomOf="@id/rl" />
+
+      
             <ListView
                 android:id="@+id/realtimelist"
                 android:layout_width="match_parent"
@@ -217,9 +180,9 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <!--        </FrameLayout>-->
+    
+
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
 </RelativeLayout>
