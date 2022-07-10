@@ -1,9 +1,11 @@
 package com.example.searchapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -12,6 +14,8 @@ import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -58,7 +62,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
     private static PopupMenu.OnMenuItemClickListener onMenuItemClickListener;
     private Menu menu;
 
-    private String BASE_URL = "http://172.10.18.161:443";
+    private String BASE_URL = "http://192.249.18.161:443";
 
 
     @Override
@@ -80,8 +84,8 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
         TextView tv_email = findViewById(R.id.tv_email);
         ImageView iv_profile = findViewById(R.id.iv_profile);
         ListView searchlist = findViewById(R.id.listview);
-        RecyclerView realtimelist = findViewById(R.id.recview);
-        realtimelist.addItemDecoration(new DividerItemDecoration(getApplicationContext(),DividerItemDecoration.VERTICAL));
+        ListView realtimelist = findViewById(R.id.realtimelist);
+//        realtimelist.addItemDecoration(new DividerItemDecoration(getApplicationContext(),DividerItemDecoration.VERTICAL));
         //ListViewAdapter adapter = new ListViewAdapter();
 //        searchlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -133,8 +137,8 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             }
         });
         searchlist.bringToFront();
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
-        realtimelist.setLayoutManager(gridLayoutManager);
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
+//        realtimelist.setLayoutManager(gridLayoutManager);
         LinearLayout fullscreen = findViewById(R.id.fullscreen); // 다른 곳 터치하면 listview 사라짐
         fullscreen.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -191,9 +195,81 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             public void onClick(View view) {
                 searchlist.setVisibility(View.VISIBLE);
 
-
-
                 Call<List<String>> call = retrofitInterface.executeMyRecord(strEmail);
+                call.enqueue(new Callback<List<String>>() {
+                    @Override
+                    public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                        if (response.code() == 200) {
+                            List<String> data = response.body();
+                            RecentSearchListAdapter adapter = new RecentSearchListAdapter(getApplicationContext(), retrofitInterface, strNick, strProfileImg, strEmail, data);
+                            searchlist.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<String>> call, @NonNull Throwable t) {
+                        Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            }
+        });
+
+
+
+//        search.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+//                //searchlist.setVisibility(View.VISIBLE);
+//                if (i==KeyEvent.KEYCODE_ENTER && keyEvent.getAction()==KeyEvent.ACTION_DOWN){
+//                    if (search.getText().toString().compareTo("")!=0) { // null값 return이 아닐 때만 동작
+//                        Intent intent = new Intent(SubActivity.this, ResultActivity.class);
+//                        intent.putExtra("search", search.getText().toString());
+//                        intent.putExtra("name",strNick);
+//                        intent.putExtra("email",strEmail);
+//                        intent.putExtra("profileImg",strProfileImg);
+//                        startActivity(intent);
+//
+//                        HashMap<String, String> map = new HashMap<>();
+//                        map.put("email", strEmail);
+//                        map.put("text", search.getText().toString());
+//
+//                        Call<Void> call = retrofitInterface.executeSearch(map);
+//
+//                        call.enqueue(new Callback<Void>() {
+//                            @Override
+//                            public void onResponse(Call<Void> call, Response<Void> response) {
+//                                Toast.makeText(SubActivity.this, "post success", Toast.LENGTH_LONG).show();
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<Void> call, Throwable t) {
+//                                Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+//                            }
+//                        });
+//                    }
+//                    //Toast.makeText(SubActivity.this, search.getText().toString(), Toast.LENGTH_SHORT).show();
+//
+//
+//                }
+//                else {
+//                    Toast.makeText(SubActivity.this, "press"+i, Toast.LENGTH_LONG).show();
+//                }
+//                return true;
+//            }
+//        });
+
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String subtext = search.getText().toString();
+                Call<List<String>> call = retrofitInterface.executeMyRecordStartsWith(strEmail, subtext);
                 call.enqueue(new Callback<List<String>>() {
                     @Override
                     public void onResponse(Call<List<String>> call, Response<List<String>> response) {
@@ -210,52 +286,13 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                         Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
-
             }
-        });
 
-        search.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                //searchlist.setVisibility(View.VISIBLE);
-                if (i==KeyEvent.KEYCODE_ENTER && keyEvent.getAction()==KeyEvent.ACTION_DOWN){
-                    if (search.getText().toString().compareTo("")!=0) { // null값 return이 아닐 때만 동작
-                        Intent intent = new Intent(SubActivity.this, ResultActivity.class);
-                        intent.putExtra("search", search.getText().toString());
-                        intent.putExtra("name",strNick);
-                        intent.putExtra("email",strEmail);
-                        intent.putExtra("profileImg",strProfileImg);
-                        startActivity(intent);
+            public void afterTextChanged(Editable editable) {
 
-                        HashMap<String, String> map = new HashMap<>();
-                        map.put("email", strEmail);
-                        map.put("text", search.getText().toString());
-
-                        Call<Void> call = retrofitInterface.executeSearch(map);
-
-                        call.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                Toast.makeText(SubActivity.this, "post success", Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-                    //Toast.makeText(SubActivity.this, search.getText().toString(), Toast.LENGTH_SHORT).show();
-
-
-                }
-                else {
-
-                }
-                return true;
             }
         });
-
 
         searchb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -291,6 +328,23 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             }
         });
 
+        Call<List<String>> call = retrofitInterface.executeRealTime(System.currentTimeMillis());
+        call.enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                if (response.code() == 200) {
+                    List<String> data = response.body();
+                    RealtimeListAdapter adapter = new RealtimeListAdapter(getApplicationContext(), data);
+                    realtimelist.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+
+            }
+        });
 
     }
 

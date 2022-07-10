@@ -177,7 +177,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="5dp"
                 android:paddingBottom="5dp"
-                app:layout_constraintBottom_toTopOf="@id/recview"
+                app:layout_constraintBottom_toTopOf="@id/realtimelist"
                 app:layout_constraintRight_toLeftOf="@+id/realtime"
                 app:layout_constraintTop_toBottomOf="@id/rl"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -196,38 +196,23 @@
                 android:layout_marginLeft="3dp"
                 app:layout_constraintLeft_toRightOf="@+id/realimage"
 
-                app:layout_constraintBottom_toTopOf="@id/recview"
+                app:layout_constraintBottom_toTopOf="@id/realtimelist"
                 app:layout_constraintTop_toBottomOf="@id/rl" />
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recview"
+            <ListView
+                android:id="@+id/realtimelist"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="#ffffff"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="2"
-                tools:listitem="@layout/listview_item"
+                android:layout_height="200dp"
+                android:layout_margin="10dp"
+
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/realtime"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
-<!--            <ListView-->
-<!--                android:id="@+id/realtimelist"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="100dp"-->
-<!--                android:layout_margin="10dp"-->
+                app:layout_constraintTop_toBottomOf="@id/realtime"
+                tools:listitem="@layout/listview_item"
+                android:background="#ffffff"
+                android:visibility="visible"
+                >
 
-<!--                app:layout_constraintLeft_toLeftOf="parent"-->
-<!--                app:layout_constraintRight_toRightOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/realtime"-->
-<!--                tools:listitem="@layout/listview_item"-->
-<!--                android:background="#ffffff"-->
-<!--                android:visibility="visible"-->
-<!--                >-->
-
-<!--            </ListView>-->
+            </ListView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
