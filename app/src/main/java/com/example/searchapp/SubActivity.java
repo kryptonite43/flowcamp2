@@ -1,28 +1,32 @@
 package com.example.searchapp;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+
 import android.graphics.Outline;
-import android.graphics.drawable.GradientDrawable;
+
 import android.os.Bundle;
-import android.view.Display;
+import android.util.Log;
+
 import android.view.KeyEvent;
-import android.view.Menu;
+
 import android.view.MenuItem;
+
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
-import android.view.inputmethod.InputMethodManager;
 
-import android.widget.ArrayAdapter;
+import android.view.ViewOutlineProvider;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,15 +39,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.kakao.usermgmt.UserManagement;
-import com.kakao.usermgmt.callback.LogoutResponseCallback;
+import com.kakao.sdk.user.UserApiClient;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import javax.xml.transform.Result;
-
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,9 +55,9 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
     private RetrofitInterface retrofitInterface;
 
     private static PopupMenu.OnMenuItemClickListener onMenuItemClickListener;
-    private Menu menu;
-
-    private String BASE_URL = "http://172.10.18.161:443";
+    private ListView searchlist;
+    private RecentSearchListAdapter adapter;
+    private String BASE_URL = "http://192.249.18.172:443";
 
 
     @Override
@@ -71,30 +70,13 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
         strEmail = intent.getStringExtra("email");
 
         FrameLayout nickframe = findViewById(R.id.nickframe);
-//        final GradientDrawable drawable = (GradientDrawable) ContextCompat.getDrawable(this, R.drawable.circle);
-//
-//        Random rnd = new Random();
-//        int color = Color.argb(255,rnd.nextInt(256),rnd.nextInt(256),rnd.nextInt(256));
-//        drawable.setColor(color);
+
         TextView tv_nick = findViewById(R.id.tv_nickname);
         TextView tv_email = findViewById(R.id.tv_email);
         ImageView iv_profile = findViewById(R.id.iv_profile);
-        ListView searchlist = findViewById(R.id.listview);
+        searchlist = findViewById(R.id.listview);
         RecyclerView realtimelist = findViewById(R.id.recview);
         realtimelist.addItemDecoration(new DividerItemDecoration(getApplicationContext(),DividerItemDecoration.VERTICAL));
-        //ListViewAdapter adapter = new ListViewAdapter();
-//        searchlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                final String item = (String) adapter.getItem(i); // listview의 item type으로 변경
-//
-//            }
-//        });
-
-        //adapter.addItem(new ListViewItem("hello"));
-        //adapter.addItem(new ListViewItem("hello"));
-        //adapter.addItem(new ListViewItem("hello"));
-        //searchlist.setAdapter(adapter);
 
         onMenuItemClickListener = new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -102,22 +84,26 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
 
                 switch( menuItem.getItemId() ){//눌러진 MenuItem의 Item Id를 얻어와 식별
                     case R.id.name:
-                        //menuItem.setTitle(strNick);
                         break;
                     case R.id.email:
                         break;
                     case R.id.logout:
-                        UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
-                            @Override
-                            public void onCompleteLogout() {
-                                // 로그아웃 성공 시 수행하는 지점
+                        UserApiClient.getInstance().logout(error -> {
+                            if (error != null) {
+                                Log.e(TAG, "로그아웃 실패, SDK에서 토큰 삭제됨", error);
+                            }
+                            else{
+                               //  로그아웃 성공 시 수행하는 지점
                                 Intent intent = new Intent(SubActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                                 startActivity(intent);
                                 finish(); // 현재 액티비티 종료
+
+                                Log.e(TAG, "로그아웃 성공, SDK에서 토큰 삭제됨");
                             }
+                            return null;
                         });
                         break;
 
@@ -133,22 +119,20 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             }
         });
         searchlist.bringToFront();
+        searchlist.setVisibility(View.GONE);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
         realtimelist.setLayoutManager(gridLayoutManager);
+
         LinearLayout fullscreen = findViewById(R.id.fullscreen); // 다른 곳 터치하면 listview 사라짐
         fullscreen.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                hideKeyboard();
-                searchlist.setVisibility(View.GONE);
-//                Display display = getWindowManager().getDefaultDisplay();
-//                int width = display.getWidth();
-//                ListView.LayoutParams parms = new ListView.LayoutParams(width,100);
-//                realtimelist.setLayoutParams(parms);
-
+                    hideKeyboard();
                 return false;
             }
         });
+
 
         iv_profile.setOutlineProvider(new ViewOutlineProvider() { // 프로필 이미지사진 둥글게
             @Override
@@ -163,18 +147,6 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
         tv_email.setText(strEmail);
         Glide.with(this).load(strProfileImg).into(iv_profile);
 
-//        findViewById(R.id.btn_logout).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
-////                    @Override
-////                    public void onCompleteLogout() {
-////                        // 로그아웃 성공 시 수행하는 지점
-////                        finish(); // 현재 액티비티 종료
-////                    }
-////                });
-//            }
-//        });
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -183,15 +155,21 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
 
         retrofitInterface = retrofit.create(RetrofitInterface.class);
 
-        EditText search = findViewById(R.id.what) ;
+        EditText search = (EditText) findViewById(R.id.what) ;
         Button searchb = findViewById(R.id.searchit);
-
+        search.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                searchlist.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.e("search click","list 나오나?");
                 searchlist.setVisibility(View.VISIBLE);
-
-
 
                 Call<List<String>> call = retrofitInterface.executeMyRecord(strEmail);
                 call.enqueue(new Callback<List<String>>() {
@@ -199,7 +177,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                     public void onResponse(Call<List<String>> call, Response<List<String>> response) {
                         if (response.code() == 200) {
                             List<String> data = response.body();
-                            RecentSearchListAdapter adapter = new RecentSearchListAdapter(getApplicationContext(), retrofitInterface, strNick, strProfileImg, strEmail, data);
+                            adapter = new RecentSearchListAdapter(getApplicationContext(), retrofitInterface, strNick, strProfileImg, strEmail, data);
                             searchlist.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         }
@@ -214,48 +192,43 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             }
         });
 
-        search.setOnKeyListener(new View.OnKeyListener() {
+        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                //searchlist.setVisibility(View.VISIBLE);
-                if (i==KeyEvent.KEYCODE_ENTER && keyEvent.getAction()==KeyEvent.ACTION_DOWN){
-                    if (search.getText().toString().compareTo("")!=0) { // null값 return이 아닐 때만 동작
-                        Intent intent = new Intent(SubActivity.this, ResultActivity.class);
-                        intent.putExtra("search", search.getText().toString());
-                        intent.putExtra("name",strNick);
-                        intent.putExtra("email",strEmail);
-                        intent.putExtra("profileImg",strProfileImg);
-                        startActivity(intent);
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                switch (i) {
+                    case EditorInfo.IME_ACTION_SEARCH:
+                        if (search.getText().toString().compareTo("")!=0) { // null값 return이 아닐 때만 동작
+                            Intent intent = new Intent(SubActivity.this, ResultActivity.class);
+                            intent.putExtra("search", search.getText().toString());
+                            intent.putExtra("name",strNick);
+                            intent.putExtra("email",strEmail);
+                            intent.putExtra("profileImg",strProfileImg);
+                            startActivity(intent);
 
-                        HashMap<String, String> map = new HashMap<>();
-                        map.put("email", strEmail);
-                        map.put("text", search.getText().toString());
+                            HashMap<String, String> map = new HashMap<>();
+                            map.put("email", strEmail);
+                            map.put("text", search.getText().toString());
 
-                        Call<Void> call = retrofitInterface.executeSearch(map);
+                            Call<Void> call = retrofitInterface.executeSearch(map);
 
-                        call.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                Toast.makeText(SubActivity.this, "post success", Toast.LENGTH_LONG).show();
-                            }
+                            call.enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                    Toast.makeText(SubActivity.this, "post success", Toast.LENGTH_LONG).show();
+                                }
 
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-                    //Toast.makeText(SubActivity.this, search.getText().toString(), Toast.LENGTH_SHORT).show();
-
-
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable t) {
+                                    Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                        break ;
                 }
-                else {
 
-                }
-                return true;
+                return true ;
             }
         });
-
 
         searchb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,21 +267,12 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
 
     }
 
-
     public final void popUp(View view) {
         PopupMenu popup = new PopupMenu(this, view); // 인자 (context, 팝업메뉴 연결 anchor 뷰)
         getMenuInflater().inflate(R.menu.menu_account, popup.getMenu()); // 메뉴아이템 건져서 메뉴 inflate
         popup.setOnMenuItemClickListener(onMenuItemClickListener); // onCreate에서 생성한 리스너를 팝업메뉴에 셋팅
         popup.getMenu().findItem(R.id.name).setTitle(strNick);
         popup.getMenu().findItem(R.id.email).setTitle(strEmail);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//            popup.setForceShowIcon(true);
-//        }
-        //MenuPopupHelper menuPopupHelper = new MenuPopupHelper(this,(MenuBuilder)popup.getMenu(), view);
-        // popup.show(view); //Popup Menu 보이기
-//        MenuPopupHelper menuHelper = new MenuPopupHelper(this, (MenuBuilder) popup.getMenu(), view);
-//        menuHelper.setForceShowIcon(true);
-//        menuHelper.show();
 
         popup.show(); //Popup Menu 보이기
     }
@@ -316,7 +280,13 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
 
     void hideKeyboard()
     {
+        searchlist.setVisibility(View.GONE);
         InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        if (this.getCurrentFocus() != null) {
+            inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+        //searchlist.setVisibility(View.GONE);
     }
+
+//
 }

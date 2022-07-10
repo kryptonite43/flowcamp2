@@ -29,8 +29,8 @@
                         android:layout_height="40dp"
                         android:layout_marginLeft="1dp"
                         android:layout_marginRight="1dp"
-                        android:background="@drawable/ic_baseline_insert_emoticon_24"
-                        android:foreground="@drawable/ic_baseline_insert_emoticon_24">
+                        android:background="@drawable/toaa"
+                        android:foreground="@drawable/toaa">
                     </Button>
 
                     <EditText
