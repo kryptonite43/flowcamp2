@@ -160,40 +160,27 @@
                     app:layout_constraintLeft_toRightOf="@+id/realimage"
                     app:layout_constraintTop_toBottomOf="@id/rl" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recview"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="#ffffff"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/realtime"
-                    app:spanCount="2"
-                    tools:listitem="@layout/listview_item" />
-                <!--            <ListView-->
-                <!--                android:id="@+id/realtimelist"-->
-                <!--                android:layout_width="match_parent"-->
-                <!--                android:layout_height="100dp"-->
-                <!--                android:layout_margin="10dp"-->
+      
+            <ListView
+                android:id="@+id/realtimelist"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_margin="10dp"
 
-                <!--                app:layout_constraintLeft_toLeftOf="parent"-->
-                <!--                app:layout_constraintRight_toRightOf="parent"-->
-                <!--                app:layout_constraintTop_toBottomOf="@id/realtime"-->
-                <!--                tools:listitem="@layout/listview_item"-->
-                <!--                android:background="#ffffff"-->
-                <!--                android:visibility="visible"-->
-                <!--                >-->
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/realtime"
+                tools:listitem="@layout/listview_item"
+                android:background="#ffffff"
+                android:visibility="visible"
+                >
 
-                <!--            </ListView>-->
+            </ListView>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <!--        </FrameLayout>-->
+    
 
         </LinearLayout>
 

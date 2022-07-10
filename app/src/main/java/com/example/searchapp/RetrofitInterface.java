@@ -20,4 +20,10 @@ public interface RetrofitInterface {
 
     @PUT("/")
     Call<Void> executeDeleteMyRecord(@Body HashMap<String, String> map);
+
+    @GET("/s")
+    Call<List<String>> executeMyRecordStartsWith(@Query("email") String email, @Query("subtext") String subtext);
+
+    @GET("/r")
+    Call<List<String>> executeRealTime(@Query("timestamp") Long timestamp);
 }
