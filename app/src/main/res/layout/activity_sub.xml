@@ -140,7 +140,7 @@
                     android:layout_marginTop="10dp"
                     android:paddingBottom="5dp"
                     android:src="@drawable/statistics"
-                    app:layout_constraintBottom_toTopOf="@id/recview"
+                    app:layout_constraintBottom_toTopOf="@id/realtimelist"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/realtime"
                     app:layout_constraintTop_toBottomOf="@id/rl">
@@ -155,7 +155,7 @@
                     android:layout_marginTop="10dp"
                     android:text="실시간 키워드"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@id/recview"
+                    app:layout_constraintBottom_toTopOf="@id/realtimelist"
 
                     app:layout_constraintLeft_toRightOf="@+id/realimage"
                     app:layout_constraintTop_toBottomOf="@id/rl" />

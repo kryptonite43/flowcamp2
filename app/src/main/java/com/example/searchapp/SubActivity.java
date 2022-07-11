@@ -1,54 +1,35 @@
 package com.example.searchapp;
 
-
 import static android.content.ContentValues.TAG;
 
-
 import androidx.annotation.NonNull;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-
-import android.graphics.Outline;
-
 import android.os.Bundle;
 import android.util.Log;
 
-
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Display;
 
 import android.view.KeyEvent;
-
 import android.view.MenuItem;
-
 import android.view.MotionEvent;
 import android.view.View;
-
-import android.view.ViewOutlineProvider;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.kakao.sdk.user.UserApiClient;
 
 import java.util.HashMap;
@@ -61,12 +42,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티비티
     private String strNick, strProfileImg, strEmail;
-    private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
     private static PopupMenu.OnMenuItemClickListener onMenuItemClickListener;
     private ListView searchlist;
     private RecentSearchListAdapter adapter;
-    private String BASE_URL = "http://192.249.18.161:443";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +59,6 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
 
         FrameLayout nickframe = findViewById(R.id.nickframe);
         TextView tv_nick = findViewById(R.id.tv_nickname);
-        TextView tv_email = findViewById(R.id.tv_email);
 
         ListView searchlist = findViewById(R.id.listview);
         ListView realtimelist = findViewById(R.id.realtimelist);
@@ -138,13 +117,12 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
         });
 
 
-
-        // 닉네임, 이메일, 프로필이미지
         tv_nick.setText(strNick);
-        tv_email.setText(strEmail);
 
 
-        retrofit = new Retrofit.Builder()
+
+        String BASE_URL = "http://192.249.18.161:443";
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -178,13 +156,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                 return false;
             }
         });
-//        search.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//            }
-//        });
+
 
         search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -216,7 +188,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                             });
                         }
                         break;
-                    }
+                }
                 return true;
             }
         });
