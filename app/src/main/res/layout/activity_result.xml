@@ -41,7 +41,7 @@
                         android:layout_gravity="center"
                         android:text="test"
                         android:paddingStart="15dp"
-                        android:background="@drawable/rectangle"
+                        android:background="@drawable/searchrec"
                         android:imeOptions="actionSearch"
                         android:inputType="text"
                         android:maxLines="1"

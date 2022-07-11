@@ -103,15 +103,17 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             }
         });
         searchlist.bringToFront();
-        searchlist.setVisibility(View.GONE);
+        searchlist.setVisibility(View.INVISIBLE);
 
-        LinearLayout fullscreen = findViewById(R.id.fullscreen); // 다른 곳 터치하면 listview 사라짐
+
+        LinearLayout fullscreen = findViewById(R.id.fullscreen);
+        fullscreen.bringToFront();
         fullscreen.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 hideKeyboard();
-                searchlist.setVisibility(View.GONE);
+                searchlist.setVisibility(View.INVISIBLE);
                 return false;
             }
         });
@@ -303,12 +305,11 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
 
     void hideKeyboard()
     {
-//        searchlist.setVisibility(View.GONE);
+
         InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (this.getCurrentFocus() != null) {
             inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
-        //searchlist.setVisibility(View.GONE);
     }
 
 //
