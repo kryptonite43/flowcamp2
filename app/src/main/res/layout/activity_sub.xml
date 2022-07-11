@@ -179,10 +179,20 @@
                 android:textSize="17sp"
                 app:layout_constraintBottom_toTopOf="@id/realtimelist"
                 app:layout_constraintLeft_toRightOf="@+id/realimage"
-                app:layout_constraintRight_toRightOf="@+id/realconst"
+                app:layout_constraintRight_toRightOf="@+id/refresh"
                 app:layout_constraintTop_toTopOf="@+id/realconst" />
 
+            <ImageView
+                android:id="@+id/refresh"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
 
+                android:paddingLeft="5dp"
+                android:src="@drawable/ic_baseline_refresh_24"
+                app:layout_constraintLeft_toRightOf="@+id/realtime"
+                app:layout_constraintBottom_toTopOf="@+id/realtimelist"
+                app:layout_constraintTop_toTopOf="@+id/realconst"
+                app:layout_constraintRight_toRightOf="@+id/realconst"/>
 
             <ListView
                 android:id="@+id/realtimelist"
