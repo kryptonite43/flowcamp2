@@ -24,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -287,6 +288,30 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             @Override
             public void onFailure(Call<List<String>> call, Throwable t) {
 
+            }
+        });
+
+        ImageView refresh_button = (ImageView) findViewById(R.id.refresh);
+        refresh_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Call<List<String>> call = retrofitInterface.executeRealTime(System.currentTimeMillis());
+                call.enqueue(new Callback<List<String>>() {
+                    @Override
+                    public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                        if (response.code() == 200) {
+                            List<String> data = response.body();
+                            RealtimeListAdapter adapter = new RealtimeListAdapter(getApplicationContext(), data);
+                            realtimelist.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<String>> call, Throwable t) {
+
+                    }
+                });
             }
         });
 
