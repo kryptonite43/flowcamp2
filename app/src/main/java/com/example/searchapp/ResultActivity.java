@@ -183,6 +183,40 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
+        tv.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String subtext = tv.getText().toString();
+                Call<List<String>> call = retrofitInterface.executeMyRecordStartsWith(email, subtext);
+                call.enqueue(new Callback<List<String>>() {
+                    @Override
+                    public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                        if (response.code() == 200) {
+                            List<String> data = response.body();
+                            RecentSearchListAdapter adapter = new RecentSearchListAdapter(getApplicationContext(), retrofitInterface, nick, profimg, email, data);
+                            lv.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<String>> call, Throwable t) {
+                        Toast.makeText(ResultActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         webView = findViewById(R.id.webview);
         webView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -207,6 +241,45 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
         search = search.replace(" ","+");
         webView.loadUrl(urls.get(0) +search);
+
+        Button searchagain = findViewById(R.id.searchagain);
+        searchagain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tv.getText().toString().compareTo("")!=0) {
+
+                    Intent intent = new Intent(ResultActivity.this, ResultActivity.class);
+                    intent.putExtra("search", tv.getText().toString());
+                    intent.putExtra("name",nick);
+                    intent.putExtra("email",email);
+                    intent.putExtra("profileImg",profimg);
+                    startActivity(intent);
+
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("email", email);
+                    map.put("text", tv.getText().toString());
+
+                    Call<Void> call = retrofitInterface.executeSearch(map);
+
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.code() == 200) {
+                                Toast.makeText(ResultActivity.this, "Posted search record", Toast.LENGTH_LONG).show();
+                            } else if (response.code() == 400) {
+                                Toast.makeText(ResultActivity.this, "Failed to post search record", Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Toast.makeText(ResultActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                }
+            }
+        });
 
         google.setOnClickListener(this);
         naver.setOnClickListener(this);
