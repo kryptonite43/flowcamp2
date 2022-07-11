@@ -74,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
         String TAG = "accountLogin()";
         Log.e("accountlogin"," ");
         UserApiClient.getInstance().loginWithKakaoAccount(MainActivity.this,(oAuthToken, error) -> {
-
+                if (error != null) {
+                    Log.e("loginkakao","s");
+                }
                 Log.i(TAG, "로그인 성공(토큰) : " + oAuthToken.getAccessToken());
                 getUserInfo();
 

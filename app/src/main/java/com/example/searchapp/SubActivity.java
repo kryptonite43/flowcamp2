@@ -43,9 +43,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티비티
     private String strNick, strProfileImg, strEmail;
     private RetrofitInterface retrofitInterface;
-
     private static PopupMenu.OnMenuItemClickListener onMenuItemClickListener;
-
     private ListView searchlist;
     private RecentSearchListAdapter adapter;
 
@@ -60,8 +58,8 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
         strEmail = intent.getStringExtra("email");
 
         FrameLayout nickframe = findViewById(R.id.nickframe);
-
         TextView tv_nick = findViewById(R.id.tv_nickname);
+
         ListView searchlist = findViewById(R.id.listview);
         ListView realtimelist = findViewById(R.id.realtimelist);
 
@@ -93,7 +91,6 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                             return null;
                         });
                         break;
-
                 }
                 return false;
             }
@@ -113,12 +110,15 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                    hideKeyboard();
+                hideKeyboard();
+                searchlist.setVisibility(View.GONE);
                 return false;
             }
         });
 
+
         tv_nick.setText(strNick);
+
 
 
         String BASE_URL = "http://192.249.18.161:443";
@@ -156,30 +156,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                 return false;
             }
         });
-//        search.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.e("search click","list 나오나?");
-//                Call<List<String>> call = retrofitInterface.executeMyRecord(strEmail);
-//                call.enqueue(new Callback<List<String>>() {
-//                    @Override
-//                    public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-//                        if (response.code() == 200) {
-//                            List<String> data = response.body();
-//                            adapter = new RecentSearchListAdapter(getApplicationContext(), retrofitInterface, strNick, strProfileImg, strEmail, data);
-//                            searchlist.setAdapter(adapter);
-//                            adapter.notifyDataSetChanged();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<List<String>> call, @NonNull Throwable t) {
-//                        Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//                searchlist.setVisibility(View.VISIBLE);
-//            }
-//        });
+
 
         search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -197,7 +174,6 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                             HashMap<String, String> map = new HashMap<>();
                             map.put("email", strEmail);
                             map.put("text", search.getText().toString());
-
                             Call<Void> call = retrofitInterface.executeSearch(map);
 
                             call.enqueue(new Callback<Void>() {
@@ -205,7 +181,6 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                                 public void onResponse(Call<Void> call, Response<Void> response) {
                                     Toast.makeText(SubActivity.this, "post success", Toast.LENGTH_LONG).show();
                                 }
-
                                 @Override
                                 public void onFailure(Call<Void> call, Throwable t) {
                                     Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
@@ -214,11 +189,9 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                         }
                         break;
                 }
-
                 return true;
             }
         });
-
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -320,7 +293,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
 
     void hideKeyboard()
     {
-        searchlist.setVisibility(View.GONE);
+//        searchlist.setVisibility(View.GONE);
         InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (this.getCurrentFocus() != null) {
             inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
