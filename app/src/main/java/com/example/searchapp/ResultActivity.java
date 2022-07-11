@@ -1,5 +1,6 @@
 package com.example.searchapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
@@ -35,16 +36,22 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ResultActivity extends AppCompatActivity implements View.OnClickListener{
     private String search, email, nick, profimg;
     private WebView webView;
     private ArrayList<String> urls;
     private static OnMenuItemClickListener onMenuItemClickListener;
+    private RetrofitInterface retrofitInterface;
+    private RecentSearchListAdapter adapter;
+
     Button home;
     LinearLayout fullscreen;
     RelativeLayout relativeLayout;
@@ -119,10 +126,38 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         lv.bringToFront();
         home = findViewById(R.id.home);
         home.setOnClickListener(this::onClick);
+
+        String BASE_URL = "http://192.249.18.161:443";
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        retrofitInterface = retrofit.create(RetrofitInterface.class);
+
         tv.setText(search);
         tv.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                Call<List<String>> call = retrofitInterface.executeMyRecord(email);
+                call.enqueue(new Callback<List<String>>() {
+                    @Override
+                    public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                        if (response.code() == 200) {
+                            List<String> data = response.body();
+                            adapter = new RecentSearchListAdapter(getApplicationContext(), retrofitInterface, nick, profimg, email, data);
+                            lv.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+                        } else if (response.code() == 400) {
+                            Toast.makeText(ResultActivity.this, "Failed to get recent search results", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<String>> call, @NonNull Throwable t) {
+                        Toast.makeText(ResultActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
                 lv.setVisibility(View.VISIBLE);
                 return false;
             }
