@@ -4,10 +4,12 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -28,9 +30,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.kakao.sdk.user.UserApiClient;
 
 import java.util.HashMap;
@@ -64,43 +68,50 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
         ListView searchlist = findViewById(R.id.listview);
         ListView realtimelist = findViewById(R.id.realtimelist);
 
-        onMenuItemClickListener = new PopupMenu.OnMenuItemClickListener() {
+
+        RelativeLayout cardviewlayout = findViewById(R.id.cardviewlayout);
+        CardView infocard = findViewById(R.id.infocard);
+        Button logoutbutton = findViewById(R.id.logoutbutton);
+        TextView profilename = findViewById(R.id.profilename);
+        TextView profileemail = findViewById(R.id.profileemail);
+        ImageView profileimage = findViewById(R.id.profileimage);
+
+        logoutbutton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
+            public void onClick(View view) {
+                UserApiClient.getInstance().logout(error -> {
+                    if (error != null) {
+                        Log.e(TAG, "로그아웃 실패, SDK에서 토큰 삭제됨", error);
+                    }
+                    else{
+                        //  로그아웃 성공 시 수행하는 지점
+                        Intent intent = new Intent(SubActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                switch( menuItem.getItemId() ){//눌러진 MenuItem의 Item Id를 얻어와 식별
-                    case R.id.name:
-                        break;
-                    case R.id.email:
-                        break;
-                    case R.id.logout:
-                        UserApiClient.getInstance().logout(error -> {
-                            if (error != null) {
-                                Log.e(TAG, "로그아웃 실패, SDK에서 토큰 삭제됨", error);
-                            }
-                            else{
-                               //  로그아웃 성공 시 수행하는 지점
-                                Intent intent = new Intent(SubActivity.this, MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish(); // 현재 액티비티 종료
 
-                                startActivity(intent);
-                                finish(); // 현재 액티비티 종료
-
-                                Log.e(TAG, "로그아웃 성공, SDK에서 토큰 삭제됨");
-                            }
-                            return null;
-                        });
-                        break;
-                }
-                return false;
+                        Log.e(TAG, "로그아웃 성공, SDK에서 토큰 삭제됨");
+                    }
+                    return null;
+                });
             }
-        };
+        });
 
         nickframe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                popUp(view);
+                //popUp(view);
+                if (infocard.getVisibility()==View.VISIBLE){
+                    infocard.setVisibility(View.INVISIBLE);
+                }
+                else if (infocard.getVisibility() == View.INVISIBLE) {
+                    profilename.setText(strNick);
+                    profileemail.setText(strEmail);
+                    Glide.with(SubActivity.this).load(strProfileImg).into(profileimage);
+                    infocard.setVisibility(View.VISIBLE);
+                }
             }
         });
         searchlist.bringToFront();
@@ -315,16 +326,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             }
         });
 
-    }
-
-    public final void popUp(View view) {
-        PopupMenu popup = new PopupMenu(this, view); // 인자 (context, 팝업메뉴 연결 anchor 뷰)
-        getMenuInflater().inflate(R.menu.menu_account, popup.getMenu()); // 메뉴아이템 건져서 메뉴 inflate
-        popup.setOnMenuItemClickListener(onMenuItemClickListener); // onCreate에서 생성한 리스너를 팝업메뉴에 셋팅
-        popup.getMenu().findItem(R.id.name).setTitle(strNick);
-        popup.getMenu().findItem(R.id.email).setTitle(strEmail);
-
-        popup.show(); //Popup Menu 보이기
+        cardviewlayout.bringToFront();
     }
 
 
@@ -337,5 +339,4 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
         }
     }
 
-//
 }
