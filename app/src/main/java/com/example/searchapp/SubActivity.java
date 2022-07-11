@@ -144,6 +144,8 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                             adapter = new RecentSearchListAdapter(getApplicationContext(), retrofitInterface, strNick, strProfileImg, strEmail, data);
                             searchlist.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
+                        } else if (response.code() == 400) {
+                            Toast.makeText(SubActivity.this, "Failed to get recent search results", Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -179,7 +181,11 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                             call.enqueue(new Callback<Void>() {
                                 @Override
                                 public void onResponse(Call<Void> call, Response<Void> response) {
-                                    Toast.makeText(SubActivity.this, "post success", Toast.LENGTH_LONG).show();
+                                    if (response.code() == 200) {
+                                        Toast.makeText(SubActivity.this, "Posted search record", Toast.LENGTH_LONG).show();
+                                    } else if (response.code() == 400) {
+                                        Toast.makeText(SubActivity.this, "Failed to post search record", Toast.LENGTH_LONG).show();
+                                    }
                                 }
                                 @Override
                                 public void onFailure(Call<Void> call, Throwable t) {
@@ -246,7 +252,11 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                     call.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
-                            Toast.makeText(SubActivity.this, "post success", Toast.LENGTH_LONG).show();
+                            if (response.code() == 200) {
+                                Toast.makeText(SubActivity.this, "Posted search record", Toast.LENGTH_LONG).show();
+                            } else if (response.code() == 400) {
+                                Toast.makeText(SubActivity.this, "Failed to post search record", Toast.LENGTH_LONG).show();
+                            }
                         }
 
                         @Override
