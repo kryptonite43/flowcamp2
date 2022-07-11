@@ -1,54 +1,35 @@
 package com.example.searchapp;
 
-
 import static android.content.ContentValues.TAG;
 
-
 import androidx.annotation.NonNull;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-
-import android.graphics.Outline;
-
 import android.os.Bundle;
 import android.util.Log;
 
-
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Display;
 
 import android.view.KeyEvent;
-
 import android.view.MenuItem;
-
 import android.view.MotionEvent;
 import android.view.View;
-
-import android.view.ViewOutlineProvider;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.kakao.sdk.user.UserApiClient;
 
 import java.util.HashMap;
@@ -61,19 +42,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티비티
     private String strNick, strProfileImg, strEmail;
-    private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
 
     private static PopupMenu.OnMenuItemClickListener onMenuItemClickListener;
 
     private ListView searchlist;
     private RecentSearchListAdapter adapter;
-
-
-    private Menu menu;
-
-    private String BASE_URL = "http://192.249.18.161:443";
-
 
 
     @Override
@@ -88,8 +62,6 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
         FrameLayout nickframe = findViewById(R.id.nickframe);
 
         TextView tv_nick = findViewById(R.id.tv_nickname);
-        TextView tv_email = findViewById(R.id.tv_email);
-        ImageView iv_profile = findViewById(R.id.iv_profile);
         ListView searchlist = findViewById(R.id.listview);
         ListView realtimelist = findViewById(R.id.realtimelist);
 
@@ -146,22 +118,11 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             }
         });
 
-
-        iv_profile.setOutlineProvider(new ViewOutlineProvider() { // 프로필 이미지사진 둥글게
-            @Override
-            public void getOutline(View view, Outline outline) {
-                outline.setRoundRect(0,0,view.getWidth(),view.getHeight(),40);
-            }
-        });
-        iv_profile.setClipToOutline(true);
-
-        // 닉네임, 이메일, 프로필이미지
         tv_nick.setText(strNick);
-        tv_email.setText(strEmail);
-        Glide.with(this).load(strProfileImg).into(iv_profile);
 
 
-        retrofit = new Retrofit.Builder()
+        String BASE_URL = "http://192.249.18.161:443";
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -174,16 +135,6 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                searchlist.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("search click","list 나오나?");
-                searchlist.setVisibility(View.VISIBLE);
-
                 Call<List<String>> call = retrofitInterface.executeMyRecord(strEmail);
                 call.enqueue(new Callback<List<String>>() {
                     @Override
@@ -201,21 +152,46 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                         Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
-
+                searchlist.setVisibility(View.VISIBLE);
+                return false;
             }
         });
+//        search.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.e("search click","list 나오나?");
+//                Call<List<String>> call = retrofitInterface.executeMyRecord(strEmail);
+//                call.enqueue(new Callback<List<String>>() {
+//                    @Override
+//                    public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+//                        if (response.code() == 200) {
+//                            List<String> data = response.body();
+//                            adapter = new RecentSearchListAdapter(getApplicationContext(), retrofitInterface, strNick, strProfileImg, strEmail, data);
+//                            searchlist.setAdapter(adapter);
+//                            adapter.notifyDataSetChanged();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<String>> call, @NonNull Throwable t) {
+//                        Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//                searchlist.setVisibility(View.VISIBLE);
+//            }
+//        });
 
         search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 switch (i) {
                     case EditorInfo.IME_ACTION_SEARCH:
-                        if (search.getText().toString().compareTo("")!=0) { // null값 return이 아닐 때만 동작
+                        if (search.getText().toString().compareTo("") != 0) { // null값 return이 아닐 때만 동작
                             Intent intent = new Intent(SubActivity.this, ResultActivity.class);
                             intent.putExtra("search", search.getText().toString());
-                            intent.putExtra("name",strNick);
-                            intent.putExtra("email",strEmail);
-                            intent.putExtra("profileImg",strProfileImg);
+                            intent.putExtra("name", strNick);
+                            intent.putExtra("email", strEmail);
+                            intent.putExtra("profileImg", strProfileImg);
                             startActivity(intent);
 
                             HashMap<String, String> map = new HashMap<>();
@@ -236,11 +212,12 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                                 }
                             });
                         }
-                        break ;
+                        break;
                 }
 
-                return true ;
-
+                return true;
+            }
+        });
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
