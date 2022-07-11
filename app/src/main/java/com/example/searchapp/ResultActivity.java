@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.text.Editable;
@@ -33,6 +34,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ResultActivity extends AppCompatActivity implements View.OnClickListener{
     private String search, email, nick, profimg;
@@ -40,6 +46,8 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     private ArrayList<String> urls;
     private static OnMenuItemClickListener onMenuItemClickListener;
     Button home;
+    LinearLayout fullscreen;
+    RelativeLayout relativeLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +73,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         Button youtube = findViewById(R.id.youtube);
         Button wiki = findViewById(R.id.wiki);
         ListView lv = findViewById(R.id.listview);
-        LinearLayout fullscreen = findViewById(R.id.fullscreen);
+        fullscreen = findViewById(R.id.fullscreen);
         
         onMenuItemClickListener = new OnMenuItemClickListener() {
             @Override
@@ -98,8 +106,9 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 //                popUp(view);
 //            }
 //        });
-        WebView webview = findViewById(R.id.webview);
-        webview.setOnTouchListener(new View.OnTouchListener() {
+//        WebView webview = findViewById(R.id.webview);
+        relativeLayout = findViewById(R.id.relfullscreen);
+        relativeLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 hideKeyboard();
@@ -111,29 +120,43 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         home = findViewById(R.id.home);
         home.setOnClickListener(this::onClick);
         tv.setText(search);
-        tv.setOnClickListener(new View.OnClickListener() {
+        tv.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
                 lv.setVisibility(View.VISIBLE);
+                return false;
             }
         });
-        tv.setOnKeyListener(new View.OnKeyListener() {
+
+        tv.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) { // 엔터 치면 실행
-                if (i==KeyEvent.KEYCODE_ENTER && keyEvent.getAction()==KeyEvent.ACTION_DOWN){
-                    Log.e("enter", "enter");
-                    search = tv.getText().toString();
-                    Intent intent = new Intent(ResultActivity.this, ResultActivity.class);
-                    intent.putExtra("search", search);
-                    intent.putExtra("name",nick);
-                    intent.putExtra("email",email);
-                    intent.putExtra("profileImg",profimg);
-                    startActivity(intent);
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                switch (i) {
+                    case EditorInfo.IME_ACTION_SEARCH:
+                        if (search.compareTo("") != 0) { // null값 return이 아닐 때만 동작
+                            search = tv.getText().toString();
+                            Intent intent = new Intent(ResultActivity.this, ResultActivity.class);
+                            intent.putExtra("search", search);
+                            intent.putExtra("name",nick);
+                            intent.putExtra("email",email);
+                            intent.putExtra("profileImg",profimg);
+                            startActivity(intent);
+                        }
+                        break;
                 }
                 return true;
             }
         });
+
         webView = findViewById(R.id.webview);
+        webView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.e("webview touch","on");
+                lv.setVisibility(View.GONE);
+                return false;
+            }
+        });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         } else {
@@ -175,7 +198,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     void hideKeyboard()
     {
         InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        inputManager.hideSoftInputFromWindow(fullscreen.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
     @Override
     public void onClick(View view) {
