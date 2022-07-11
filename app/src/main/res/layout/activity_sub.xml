@@ -50,8 +50,8 @@
 
             <ImageView
                 android:id="@+id/logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="278dp"
+                android:layout_height="53dp"
                 android:layout_marginBottom="25dp"
                 android:src="@drawable/logo2">
 
@@ -151,8 +151,7 @@
             android:id="@+id/realconst"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
-            >
+            android:layout_marginTop="200dp">
 
             <ImageView
                 android:id="@+id/realimage"
@@ -161,10 +160,10 @@
 
                 android:paddingLeft="5dp"
                 android:src="@drawable/statistics"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/realtimelist"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/realtime">
+                app:layout_constraintRight_toLeftOf="@+id/realtime"
+                app:layout_constraintTop_toTopOf="parent">
 
             </ImageView>
 
@@ -172,8 +171,8 @@
                 android:id="@+id/realtime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
                 android:gravity="start"
+                android:padding="10dp"
                 android:text="실시간 키워드"
 
                 android:textSize="17sp"
@@ -189,10 +188,10 @@
 
                 android:paddingLeft="5dp"
                 android:src="@drawable/ic_baseline_refresh_24"
-                app:layout_constraintLeft_toRightOf="@+id/realtime"
                 app:layout_constraintBottom_toTopOf="@+id/realtimelist"
-                app:layout_constraintTop_toTopOf="@+id/realconst"
-                app:layout_constraintRight_toRightOf="@+id/realconst"/>
+                app:layout_constraintLeft_toRightOf="@+id/realtime"
+                app:layout_constraintRight_toRightOf="@+id/realconst"
+                app:layout_constraintTop_toTopOf="@+id/realconst" />
 
             <ListView
                 android:id="@+id/realtimelist"
@@ -212,5 +211,4 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
-
 </RelativeLayout>
