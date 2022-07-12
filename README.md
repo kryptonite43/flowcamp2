@@ -61,7 +61,8 @@
 
 **Home Page (Main Search)**
 
-<img src="https://user-images.githubusercontent.com/58676453/178438666-ffe0a62e-64d2-450d-b1a6-a4996c833a42.png" width="500"/>
+<img src="https://user-images.githubusercontent.com/58676453/178446028-bd7923a1-5c6f-4eae-aae8-69b6032f3b11.png" width="800"/>
+
 
 - 중앙 search 부분 클릭 시 본인 최근 검색어 listview 형태로 확인, keyboard 팝업, fullscreen touch 시 전체 dismiss
 - 오른쪽 검색 버튼 또는 enter 클릭 시 해당 text에 대한 search result page로 이동
