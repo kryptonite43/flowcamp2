@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.RoundedCorner;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -27,6 +28,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.kakao.sdk.user.UserApiClient;
 import java.util.HashMap;
 import java.util.List;
@@ -92,7 +96,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                 else if (infocard.getVisibility() == View.INVISIBLE) {
                     profilename.setText(strNick);
                     profileemail.setText(strEmail);
-                    Glide.with(SubActivity.this).load(strProfileImg).into(profileimage);
+                    Glide.with(SubActivity.this).load(strProfileImg).apply(new RequestOptions().transforms(new CenterCrop(),new RoundedCorners(30))).into(profileimage);
                     infocard.setVisibility(View.VISIBLE);
                 }
             }
