@@ -52,7 +52,7 @@ https://drive.google.com/file/d/1tCRrMSmpFg8s2EttuHZdqGesk-Pu9E9w/view?usp=shari
 <img src="https://user-images.githubusercontent.com/58676453/178438942-b4d6b803-7c90-4800-9ab2-7179769909d2.jpg" width="200"/>
 
 
-- 카카오 로그인 버튼을 누르면 기기에 카카오톡 앱 존재 여부에 따라 카카오톡 간편 로그인 또는 웹페이지를 통한 로그인으로 연결
+- 카카오 로그인 버튼을 누르면 기기의 카카오톡 앱 존재 여부에 따라 카카오톡 간편 로그인 또는 웹페이지를 통한 로그인으로 연결
 - 로그인 성공 시 사용자의 이름, 프로필 이미지, 이메일 정보 받아옴
 - UserApiClient에서 사용자 토큰 정보를 확인하여 로그인 이력이 있다면 앱 종료 후 재실행 시에 자동 로그인 구현
 
