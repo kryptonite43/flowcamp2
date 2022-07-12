@@ -266,6 +266,17 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         wiki.setOnClickListener(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(ResultActivity.this, SubActivity.class);
+        intent.putExtra("search", search);
+        intent.putExtra("name",nick);
+        intent.putExtra("email",email);
+        intent.putExtra("profileImg",profimg);
+        startActivity(intent);
+    }
+
     void hideKeyboard()
     {
         InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
