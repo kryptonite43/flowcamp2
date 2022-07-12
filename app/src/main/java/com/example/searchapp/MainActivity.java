@@ -46,11 +46,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(MainActivity.this)){
-                    Log.e("onclick", "onclick");
                     login();
                 }
                 else {
-                    Log.e("로그인",".........");
                     accountLogin();
                 }
             }
@@ -61,11 +59,8 @@ public class MainActivity extends AppCompatActivity {
     public void login() {
         String TAG = "login()";
         UserApiClient.getInstance().loginWithKakaoTalk(MainActivity.this, (oAuthToken,error) -> {
-            Log.e("loginerror?","login");
-
-                Log.e(TAG, "로그인 성공(토큰): "+oAuthToken.getAccessToken());
-                getUserInfo();
-
+            Log.e(TAG, "로그인 성공(토큰): "+oAuthToken.getAccessToken());
+            getUserInfo();
             return null;
         });
     }
@@ -75,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("accountlogin"," ");
         UserApiClient.getInstance().loginWithKakaoAccount(MainActivity.this,(oAuthToken, error) -> {
                 if (error != null) {
-                    Log.e("loginkakao","s");
+                    Log.e("kakao","error");
                 }
                 Log.i(TAG, "로그인 성공(토큰) : " + oAuthToken.getAccessToken());
                 getUserInfo();
