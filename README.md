@@ -11,7 +11,7 @@
 
 카이스트 산업및시스템공학과 [정진규](https://github.com/jeongjingyu)
 
-숙명여자대학교 소프트웨어학부 [송유진](https://github.com/kryptonite43)
+숙명여자대학교 소프트웨어학부 [손유진](https://github.com/kryptonite43)
 
 
 
@@ -45,6 +45,8 @@
 - 화면 중간에서 3초 동안 반복해서 animation 진행되도록 display
 
 
+
+
 **Kakao Login Page**
 
 <img src="https://user-images.githubusercontent.com/58676453/178438942-b4d6b803-7c90-4800-9ab2-7179769909d2.jpg" width="200"/>
@@ -57,17 +59,26 @@
 - '메뉴 보기'에 onClickListener로 각 식당의 대표 메뉴판 이미지가 Dialog로 팝업 가능하도록 구현, 다시 이미지 클릭 시 Dialog dismiss
 
 
+
+
 **Home Page (Main Search)**
 
 <img src="https://user-images.githubusercontent.com/58676453/178438666-ffe0a62e-64d2-450d-b1a6-a4996c833a42.png" width="500"/>
 
+- 중앙 search 부분 클릭 시 본인 최근 검색어 listview 형태로 확인, keyboard 팝업, fullscreen touch 시 전체 dismiss
+- 오른쪽 검색 버튼 또는 enter 클릭 시 해당 text에 대한 search result page로 이동
 
-- 앱 시작 시 홈 탭으로 시작
-- RecyclerView 위에 CardView 구현
-- 각 CardView에 식당 사진 리스트, 식당 이름, 식당 한줄평, 식당 별점, 메뉴 보기 텍스트 배치
-- 식당 사진 리스트는 CardView 안에 ScrollView로 각 4개의 사진이 horizontal scroll을 통해 확인할 수 있도록 구현
-- '메뉴 보기'에 onClickListener로 각 식당의 대표 메뉴판 이미지가 Dialog로 팝업 가능하도록 구현, 다시 이미지 클릭 시 Dialog dismiss
+***카카오 로그인 정보***
+- 상단 오른쪽 버튼 누르면 로그인 정보(카카오톡 프로필 이미지, 이름, 이메일)와 로그아웃 버튼 팝업, fullscreen touch 시 dismiss
 
+***최근 검색어***
+- 오른쪽 검색 버튼 또는 enter 클릭 시 mongoDB에 이메일, text, get 여부(이후 최근 검색어 삭제에 활용, default=true), 검색 시점 저장
+- 최근 검색어는 검색한 시점 기준 최근 순 (get=true인 data만)
+- 최근 검색어 listview에서 오른쪽 x버튼 클릭 시 최근 검색어 listview에서 삭제, 해당 text에 대한 모든 이전의 본인 검색 DB의 get=false로 update
+
+***실시간 검색어***
+- 화면 하단에 실시간 검색어 display, home 화면 켜진 시점으로부터 이전 1시간 동안의 검색 기록 대상, 새로고침 버튼 클릭 시 버튼 클릭 시 그 시점으로부터 이전 1시간 동안의 검색 기록 대상
+- mongoDB에서 text에 대한 group 이후 count 기준으로 순위 display
 
 
 **Search Result Page**
