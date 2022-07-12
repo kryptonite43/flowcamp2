@@ -2,9 +2,6 @@ package com.example.searchapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuBuilder;
-import androidx.appcompat.view.menu.MenuPopupHelper;
-
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,11 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
-import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,18 +21,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,16 +61,13 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         nick = intent.getStringExtra("name");
         email = intent.getStringExtra("email");
         profimg = intent.getStringExtra("profileImg");
-        Log.e("email", String.valueOf(email));
-        Log.e("result", search);
 
-        EditText tv = findViewById(R.id.restv);
-        //Button menu = findViewById(R.id.menubutton);
+        EditText searchresult = findViewById(R.id.search_keyword_result);
         Button google = findViewById(R.id.google);
         Button naver = findViewById(R.id.naver);
         Button youtube = findViewById(R.id.youtube);
         Button wiki = findViewById(R.id.wiki);
-        ListView lv = findViewById(R.id.listview);
+        ListView searchlist = findViewById(R.id.searchlist_result);
         fullscreen = findViewById(R.id.fullscreen);
         
         onMenuItemClickListener = new OnMenuItemClickListener() {
@@ -107,23 +95,17 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 return false;
             }
         };
-//        menu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                popUp(view);
-//            }
-//        });
-//        WebView webview = findViewById(R.id.webview);
+
         relativeLayout = findViewById(R.id.relfullscreen);
         relativeLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 hideKeyboard();
-                lv.setVisibility(View.GONE);
+                searchlist.setVisibility(View.GONE);
                 return false;
             }
         });
-        lv.bringToFront();
+        searchlist.bringToFront();
         home = findViewById(R.id.home);
         home.setOnClickListener(this::onClick);
 
@@ -135,8 +117,8 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
         retrofitInterface = retrofit.create(RetrofitInterface.class);
 
-        tv.setText(search);
-        tv.setOnTouchListener(new View.OnTouchListener() {
+        searchresult.setText(search);
+        searchresult.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 Call<List<String>> call = retrofitInterface.executeMyRecord(email);
@@ -146,7 +128,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                         if (response.code() == 200) {
                             List<String> data = response.body();
                             adapter = new RecentSearchListAdapter(getApplicationContext(), retrofitInterface, nick, profimg, email, data);
-                            lv.setAdapter(adapter);
+                            searchlist.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         } else if (response.code() == 400) {
                             Toast.makeText(ResultActivity.this, "Failed to get recent search results", Toast.LENGTH_LONG).show();
@@ -158,18 +140,18 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                         Toast.makeText(ResultActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
-                lv.setVisibility(View.VISIBLE);
+                searchlist.setVisibility(View.VISIBLE);
                 return false;
             }
         });
 
-        tv.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        searchresult.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 switch (i) {
                     case EditorInfo.IME_ACTION_SEARCH:
                         if (search.compareTo("") != 0) { // null값 return이 아닐 때만 동작
-                            search = tv.getText().toString();
+                            search = searchresult.getText().toString();
                             Intent intent = new Intent(ResultActivity.this, ResultActivity.class);
                             intent.putExtra("search", search);
                             intent.putExtra("name",nick);
@@ -183,7 +165,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        tv.addTextChangedListener(new TextWatcher() {
+        searchresult.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -191,7 +173,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String subtext = tv.getText().toString();
+                String subtext = searchresult.getText().toString();
                 Call<List<String>> call = retrofitInterface.executeMyRecordStartsWith(email, subtext);
                 call.enqueue(new Callback<List<String>>() {
                     @Override
@@ -199,7 +181,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                         if (response.code() == 200) {
                             List<String> data = response.body();
                             RecentSearchListAdapter adapter = new RecentSearchListAdapter(getApplicationContext(), retrofitInterface, nick, profimg, email, data);
-                            lv.setAdapter(adapter);
+                            searchlist.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         }
                     }
@@ -221,8 +203,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         webView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                Log.e("webview touch","on");
-                lv.setVisibility(View.GONE);
+                searchlist.setVisibility(View.GONE);
                 return false;
             }
         });
@@ -242,14 +223,13 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         search = search.replace(" ","+");
         webView.loadUrl(urls.get(0) +search);
 
-        Button searchagain = findViewById(R.id.searchagain);
+        Button searchagain = findViewById(R.id.search_again);
         searchagain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (tv.getText().toString().compareTo("")!=0) {
-
+                if (searchresult.getText().toString().compareTo("")!=0) {
                     Intent intent = new Intent(ResultActivity.this, ResultActivity.class);
-                    intent.putExtra("search", tv.getText().toString());
+                    intent.putExtra("search", searchresult.getText().toString());
                     intent.putExtra("name",nick);
                     intent.putExtra("email",email);
                     intent.putExtra("profileImg",profimg);
@@ -257,7 +237,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
                     HashMap<String, String> map = new HashMap<>();
                     map.put("email", email);
-                    map.put("text", tv.getText().toString());
+                    map.put("text", searchresult.getText().toString());
 
                     Call<Void> call = retrofitInterface.executeSearch(map);
 
@@ -276,7 +256,6 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                             Toast.makeText(ResultActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
-
                 }
             }
         });
@@ -285,29 +264,14 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         naver.setOnClickListener(this);
         youtube.setOnClickListener(this);
         wiki.setOnClickListener(this);
-
-
     }
-    public final void popUp(View view) {
-        PopupMenu popup = new PopupMenu(this, view); // 인자 (context, 팝업메뉴 연결 anchor 뷰)
-        getMenuInflater().inflate(R.menu.menu_main, popup.getMenu()); // 메뉴아이템 건져서 메뉴 inflate
-        popup.setOnMenuItemClickListener(onMenuItemClickListener); // onCreate에서 생성한 리스너를 팝업메뉴에 셋팅
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            popup.setForceShowIcon(true);
-        }
-        //MenuPopupHelper menuPopupHelper = new MenuPopupHelper(this,(MenuBuilder)popup.getMenu(), view);
-        // popup.show(view); //Popup Menu 보이기
-//        MenuPopupHelper menuHelper = new MenuPopupHelper(this, (MenuBuilder) popup.getMenu(), view);
-//        menuHelper.setForceShowIcon(true);
-//        menuHelper.show();
 
-        popup.show(); //Popup Menu 보이기
-    }
     void hideKeyboard()
     {
         InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(fullscreen.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
+
     @Override
     public void onClick(View view) {
         search = search.replace(" ","+");
@@ -325,7 +289,6 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 webView.loadUrl(urls.get(3)+search);
                 break;
             case R.id.home:
-//                home.setVisibility(View.VISIBLE);
                 Intent intent = new Intent(ResultActivity.this, SubActivity.class);
                 intent.putExtra("search", search);
                 intent.putExtra("name",nick);

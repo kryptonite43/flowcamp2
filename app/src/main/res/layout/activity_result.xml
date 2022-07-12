@@ -9,7 +9,6 @@
     android:id="@+id/relfullscreen"
     tools:context=".ResultActivity">
 
-
     <LinearLayout
         android:id="@+id/fullscreen"
         android:layout_width="match_parent"
@@ -18,7 +17,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/linear"
+            android:id="@+id/search_bar_block_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -33,8 +32,8 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/toaa"
                 android:foreground="@drawable/toaa"
-                android:padding="5dp"></Button>
-
+                android:padding="5dp">
+            </Button>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -45,14 +44,12 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/restv"
+                    android:id="@+id/search_keyword_result"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
-
                     android:layout_marginRight="5dp"
-
                     android:background="@null"
                     android:hint="test"
                     android:imeOptions="actionSearch"
@@ -67,22 +64,19 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/searchagain"
+                    android:id="@+id/search_again"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/search3"
                     android:backgroundTint="#a3a3a3">
-
                 </Button>
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-
                 android:layout_marginLeft="5dp">
 
                 <Button
@@ -93,7 +87,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/google"
-                    android:foreground="@drawable/google"></Button>
+                    android:foreground="@drawable/google">
+                </Button>
 
                 <Button
                     android:id="@+id/youtube"
@@ -102,7 +97,8 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/youtube"
-                    android:foreground="@drawable/youtube"></Button>
+                    android:foreground="@drawable/youtube">
+                </Button>
 
                 <Button
                     android:id="@+id/naver"
@@ -110,20 +106,19 @@
                     android:layout_height="25dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
-                    android:foreground="@drawable/naver"></Button>
+                    android:foreground="@drawable/naver">
+                </Button>
 
                 <Button
                     android:id="@+id/wiki"
                     android:layout_width="25dp"
                     android:layout_height="23dp"
                     android:layout_gravity="center"
-
                     android:layout_marginEnd="5dp"
                     android:background="@drawable/wiki"
-                    android:foreground="@drawable/wiki"></Button>
+                    android:foreground="@drawable/wiki">
+                </Button>
             </LinearLayout>
-
-
         </LinearLayout>
 
         <WebView
@@ -131,19 +126,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp">
-
         </WebView>
     </LinearLayout>
 
     <ListView
-        android:id="@+id/listview"
+        android:id="@+id/searchlist_result"
         android:layout_width="180dp"
         android:layout_height="200dp"
         android:layout_gravity="start"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="45dp"
         android:background="@drawable/rectangle"
-
         android:visibility="gone" />
 </RelativeLayout>
 

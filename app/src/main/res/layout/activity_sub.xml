@@ -5,10 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:background="#F1F1F1"
     tools:context=".SubActivity">
-
 
     <LinearLayout
         android:id="@+id/fullscreen"
@@ -17,14 +15,12 @@
         android:weightSum="6"
         android:orientation="vertical">
 
-
         <FrameLayout
             android:id="@+id/nickframe"
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_gravity="end"
             android:layout_margin="5dp"
-
             android:background="@drawable/circle">
 
             <TextView
@@ -32,7 +28,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-
                 android:foregroundGravity="center"
                 android:text="name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -44,17 +39,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="bottom|center"
-
             android:orientation="vertical">
 
-
             <ImageView
-                android:id="@+id/logo"
+                android:id="@+id/logo_image"
                 android:layout_width="278dp"
                 android:layout_height="53dp"
                 android:layout_marginBottom="25dp"
                 android:src="@drawable/logo2">
-
             </ImageView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -63,7 +55,7 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/block"
+                    android:id="@+id/search_bar_block"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:orientation="horizontal"
@@ -76,7 +68,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <EditText
-                        android:id="@+id/what"
+                        android:id="@+id/search_keyword"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="7dp"
@@ -89,11 +81,10 @@
                         android:inputType="text"
                         android:maxLines="1"
                         android:paddingStart="15dp">
-
                     </EditText>
 
                     <Button
-                        android:id="@+id/searchit"
+                        android:id="@+id/search_button"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
@@ -106,17 +97,11 @@
                         android:foreground="@drawable/search3"
                         android:paddingRight="5dp" />
                 </LinearLayout>
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
         </LinearLayout>
+
         <RelativeLayout
-            android:id="@+id/rl"
+            android:id="@+id/searchlist_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
@@ -124,7 +109,7 @@
             app:layout_constraintRight_toRightOf="parent">
 
             <ListView
-                android:id="@+id/listview"
+                android:id="@+id/searchlist"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_marginLeft="20dp"
@@ -133,8 +118,6 @@
                 android:background="@drawable/rectangle"
                 android:visibility="invisible"
                 tools:listitem="@layout/listview_item" />
-
-
         </RelativeLayout>
     </LinearLayout>
 
@@ -148,67 +131,58 @@
         android:gravity="center">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/realconst"
+            android:id="@+id/realtime_block"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="200dp">
 
             <ImageView
-                android:id="@+id/realimage"
+                android:id="@+id/realtimeimage"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-
                 android:paddingLeft="5dp"
                 android:src="@drawable/statistics"
                 app:layout_constraintBottom_toTopOf="@id/realtimelist"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/realtime"
+                app:layout_constraintRight_toLeftOf="@+id/realtimetext"
                 app:layout_constraintTop_toTopOf="parent">
-
             </ImageView>
 
             <TextView
-                android:id="@+id/realtime"
+                android:id="@+id/realtimetext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="10dp"
                 android:text="실시간 키워드"
-
                 android:textSize="17sp"
                 app:layout_constraintBottom_toTopOf="@id/realtimelist"
-                app:layout_constraintLeft_toRightOf="@+id/realimage"
+                app:layout_constraintLeft_toRightOf="@+id/realtimeimage"
                 app:layout_constraintRight_toRightOf="@+id/refresh"
-                app:layout_constraintTop_toTopOf="@+id/realconst" />
+                app:layout_constraintTop_toTopOf="@+id/realtime_block" />
 
             <ImageView
                 android:id="@+id/refresh"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-
                 android:paddingLeft="5dp"
                 android:src="@drawable/ic_baseline_refresh_24"
                 app:layout_constraintBottom_toTopOf="@+id/realtimelist"
-                app:layout_constraintLeft_toRightOf="@+id/realtime"
-                app:layout_constraintRight_toRightOf="@+id/realconst"
-                app:layout_constraintTop_toTopOf="@+id/realconst" />
+                app:layout_constraintLeft_toRightOf="@+id/realtimetext"
+                app:layout_constraintRight_toRightOf="@+id/realtime_block"
+                app:layout_constraintTop_toTopOf="@+id/realtime_block" />
 
             <ListView
                 android:id="@+id/realtimelist"
                 android:layout_width="200dp"
                 android:layout_height="250dp"
-
-
                 android:background="@drawable/rectangle"
                 android:visibility="visible"
-
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/realtime"
+                app:layout_constraintTop_toBottomOf="@id/realtimetext"
                 tools:listitem="@layout/listview_item">
-
             </ListView>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
 
@@ -223,12 +197,12 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/infocard"
-
             android:layout_width="180dp"
             android:layout_height="250dp"
             android:layout_marginTop="5dp"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:background="@drawable/rectangle">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -238,6 +212,7 @@
                 android:layout_marginRight="15dp"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
                     android:id="@+id/profileimage"
                     android:scaleType="center"
@@ -246,16 +221,18 @@
                     android:layout_height="80dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_baseline_insert_emoticon_24">
-
                 </ImageView>
+
                 <TextView
                     android:id="@+id/profilename"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:layout_gravity="center"
                     android:textSize="18sp"
                     android:text="이름">
                 </TextView>
+
                 <TextView
                     android:id="@+id/profileemail"
                     android:layout_width="wrap_content"
@@ -267,17 +244,14 @@
                     android:textAlignment="center"
                     android:textSize="14sp">
                 </TextView>
+
                 <Button
-                    android:id="@+id/logoutbutton"
+                    android:id="@+id/logout_button"
                     android:layout_width="90dp"
                     android:layout_height="50dp"
-
                     android:layout_gravity="center"
-                    android:textSize="18sp"
-                    android:text="로그아웃"
-
-                    >
-
+                    android:textSize="16sp"
+                    android:text="로그아웃">
                 </Button>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
