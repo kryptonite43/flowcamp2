@@ -87,6 +87,7 @@
 - google, youtube, naver, wikipedia 아이콘을 누르면 각각 해당하는 페이지로 하단의 WebView에 검색 결과를 보여줌
 - 검색창을 눌렀을 때 검색 기록을 볼 수 있으며, 해당 페이지에서 재검색 가능. fullscreen 터치 시 검색 기록 창 dismiss
 - 검색창 좌측의 아이콘을 누르면 다시 Home Page로 이동
+- 뒤로가기 버튼을 눌렀을 시에도 Home Page에 검색 기록 업데이트
 
 
 
