@@ -38,7 +38,8 @@
 
 **Start Screen**
 
-<img src="https://user-images.githubusercontent.com/58676453/178438850-fc4021aa-d06a-4aa5-bc2c-9e016d0165b5.jpg" width="200"/>
+<img src="https://user-images.githubusercontent.com/58676453/178439764-a6d46762-7804-417f-96d9-bffd9ca8d422.jpg" width="200"/>
+
 
 - LottieFiles를 통해 lottie animation 다운로드 후 배치
 - 화면 중간에서 3초 동안 반복해서 animation 진행되도록 display
@@ -46,7 +47,7 @@
 
 **Kakao Login Page**
 
-<img src="https://user-images.githubusercontent.com/58676453/178438942-b4d6b803-7c90-4800-9ab2-7179769909d2.jpg" width="500"/>
+<img src="https://user-images.githubusercontent.com/58676453/178438942-b4d6b803-7c90-4800-9ab2-7179769909d2.jpg" width="200"/>
 
 
 - 앱 시작 시 홈 탭으로 시작
@@ -71,7 +72,7 @@
 
 **Search Result Page**
 
-<img src="https://user-images.githubusercontent.com/58676453/178439323-56da0154-aa0d-478e-a2c2-930a0432288d.png" width="500"/>
+<img src="https://user-images.githubusercontent.com/58676453/178439323-56da0154-aa0d-478e-a2c2-930a0432288d.png" width="700"/>
 
 
 - ExpandableListView 활용
