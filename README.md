@@ -52,11 +52,9 @@
 <img src="https://user-images.githubusercontent.com/58676453/178438942-b4d6b803-7c90-4800-9ab2-7179769909d2.jpg" width="200"/>
 
 
-- 앱 시작 시 홈 탭으로 시작
-- RecyclerView 위에 CardView 구현
-- 각 CardView에 식당 사진 리스트, 식당 이름, 식당 한줄평, 식당 별점, 메뉴 보기 텍스트 배치
-- 식당 사진 리스트는 CardView 안에 ScrollView로 각 4개의 사진이 horizontal scroll을 통해 확인할 수 있도록 구현
-- '메뉴 보기'에 onClickListener로 각 식당의 대표 메뉴판 이미지가 Dialog로 팝업 가능하도록 구현, 다시 이미지 클릭 시 Dialog dismiss
+- 카카오 로그인 버튼을 누르면 기기에 카카오톡 앱 존재 여부에 따라 카카오톡 간편 로그인 또는 웹페이지를 통한 로그인으로 연결
+- 로그인 성공 시 사용자의 이름, 프로필 이미지, 이메일 정보 받아옴
+- UserApiClient에서 사용자 토큰 정보를 확인하여 로그인 이력이 있다면 앱 종료 후 재실행 시에 자동 로그인 구현
 
 
 
@@ -86,13 +84,9 @@
 <img src="https://user-images.githubusercontent.com/58676453/178439323-56da0154-aa0d-478e-a2c2-930a0432288d.png" width="700"/>
 
 
-- ExpandableListView 활용
-- json 형식으로 저장한 카이스트 주변 맛집 13곳의 정보(연락처, 평균 가격, 별점, 운영시간 등)를 파싱
-- RatingBar를 활용하여 평점을 별로 표현함
-- ListView에서 각 Group 클릭 시 해당 가게에 대한 정보를 확인할 수 있도록 확장됨
-- Intent를 활용하여 'CALL' 버튼 클릭 시 해당 가게로 전화 걸기 가능
-- 'MAP' 버튼 클릭시 해당 가게의 위치를 확인할 수 있도록 지도 탭으로 이동
-- 검색 시 검색어에 해당하는 가게만 ListView에 뜰 수 있도록 함
+- google, youtube, naver, wikipedia 아이콘을 누르면 각각 해당하는 페이지로 하단의 WebView에 검색 결과를 보여줌
+- 검색창을 눌렀을 때 검색 기록을 볼 수 있으며, 해당 페이지에서 재검색 가능. fullscreen 터치 시 검색 기록 창 dismiss
+- 검색창 좌측의 아이콘을 누르면 다시 Home Page로 이동
 
 
 
