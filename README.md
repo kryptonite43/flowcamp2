@@ -91,12 +91,6 @@
 - 뒤로가기 버튼을 눌렀을 시에도 Home Page에 검색 기록 업데이트
 
 
-
-## User Scenario
-
-1. 
-
-
 ## Extra
 - Font: Noto Sans Medium
 - Android Studio Chipmunk
