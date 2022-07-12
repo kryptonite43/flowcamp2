@@ -128,15 +128,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //@Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-////        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) // main으로 돌아올때 값 전달
-////            super.onActivityResult(requestCode, resultCode, data);
-//    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        Session.getCurrentSession().removeCallback(mSessionCallback); // 액티비티 죽었을 때 객체 해제
     }
 }

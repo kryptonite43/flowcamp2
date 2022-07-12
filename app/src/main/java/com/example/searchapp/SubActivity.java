@@ -5,38 +5,29 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
-
 import android.text.Editable;
 import android.text.TextWatcher;
-
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.kakao.sdk.user.UserApiClient;
-
 import java.util.HashMap;
 import java.util.List;
 import retrofit2.Call;
@@ -48,15 +39,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티비티
     private String strNick, strProfileImg, strEmail;
     private RetrofitInterface retrofitInterface;
-    private static PopupMenu.OnMenuItemClickListener onMenuItemClickListener;
-    private ListView searchlist;
     private RecentSearchListAdapter adapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub);
+
         Intent intent = getIntent();
         strNick = intent.getStringExtra("name");
         strProfileImg = intent.getStringExtra("profileImg");
@@ -64,19 +53,16 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
 
         FrameLayout nickframe = findViewById(R.id.nickframe);
         TextView tv_nick = findViewById(R.id.tv_nickname);
-
-        ListView searchlist = findViewById(R.id.listview);
+        ListView searchlist = findViewById(R.id.searchlist);
         ListView realtimelist = findViewById(R.id.realtimelist);
-
-
         RelativeLayout cardviewlayout = findViewById(R.id.cardviewlayout);
         CardView infocard = findViewById(R.id.infocard);
-        Button logoutbutton = findViewById(R.id.logoutbutton);
+        Button logoutbutton = findViewById(R.id.logout_button);
         TextView profilename = findViewById(R.id.profilename);
         TextView profileemail = findViewById(R.id.profileemail);
         ImageView profileimage = findViewById(R.id.profileimage);
 
-        logoutbutton.setOnClickListener(new View.OnClickListener() {
+        logoutbutton.setOnClickListener(new View.OnClickListener() { // 로그아웃 버튼
             @Override
             public void onClick(View view) {
                 UserApiClient.getInstance().logout(error -> {
@@ -88,10 +74,8 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                         Intent intent = new Intent(SubActivity.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
                         startActivity(intent);
                         finish(); // 현재 액티비티 종료
-
                         Log.e(TAG, "로그아웃 성공, SDK에서 토큰 삭제됨");
                     }
                     return null;
@@ -99,10 +83,9 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             }
         });
 
-        nickframe.setOnClickListener(new View.OnClickListener() {
+        nickframe.setOnClickListener(new View.OnClickListener() { // 프로필 누를 시 infocard 보여주기
             @Override
             public void onClick(View view) {
-                //popUp(view);
                 if (infocard.getVisibility()==View.VISIBLE){
                     infocard.setVisibility(View.INVISIBLE);
                 }
@@ -117,7 +100,6 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
         searchlist.bringToFront();
         searchlist.setVisibility(View.INVISIBLE);
 
-
         LinearLayout fullscreen = findViewById(R.id.fullscreen);
         fullscreen.bringToFront();
         fullscreen.setOnTouchListener(new View.OnTouchListener() {
@@ -126,15 +108,13 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 hideKeyboard();
                 searchlist.setVisibility(View.INVISIBLE);
+                if (infocard.getVisibility()==View.VISIBLE) {
+                    infocard.setVisibility(View.INVISIBLE);
+                }
                 return false;
             }
         });
-
-
         tv_nick.setText(strNick);
-
-
-
         String BASE_URL = "http://192.249.18.161:443";
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -143,8 +123,9 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
 
         retrofitInterface = retrofit.create(RetrofitInterface.class);
 
-        EditText search = (EditText) findViewById(R.id.what) ;
-        Button searchb = findViewById(R.id.searchit);
+        EditText search = (EditText) findViewById(R.id.search_keyword) ;
+        Button searchb = findViewById(R.id.search_button);
+
         search.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
@@ -173,8 +154,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             }
         });
 
-
-        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        search.setOnEditorActionListener(new TextView.OnEditorActionListener() { // 키보드에서 엔터 시 검색됨
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 switch (i) {
@@ -212,6 +192,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                 return true;
             }
         });
+
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -246,7 +227,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
             }
         });
 
-        searchb.setOnClickListener(new View.OnClickListener() {
+        searchb.setOnClickListener(new View.OnClickListener() { // 검색 버튼 클릭
             @Override
             public void onClick(View view) {
                 if (search.getText().toString().compareTo("")!=0) {
@@ -278,9 +259,7 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                             Toast.makeText(SubActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
-
                 }
-
             }
         });
 
@@ -325,18 +304,14 @@ public class SubActivity extends AppCompatActivity { // 검색창 뜨는 액티�
                 });
             }
         });
-
         cardviewlayout.bringToFront();
     }
 
-
     void hideKeyboard()
     {
-
         InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (this.getCurrentFocus() != null) {
             inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
-
 }
